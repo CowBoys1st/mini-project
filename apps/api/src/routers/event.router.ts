@@ -15,7 +15,7 @@ export class EventRouter {
 
   private initializeRoutes(): void {
     this.router.post('/', this.eventController.createEvents);
-    this.router.post('/images', uploader("avatar", "/avatar").single("avatar"), this.eventController.CreateImage );
+    this.router.post('/images', uploader("avatar", "/avatar").single("image"), this.eventController.CreateImage );
   }
 
   getRouter(): Router {
