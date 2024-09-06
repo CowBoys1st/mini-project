@@ -16,7 +16,7 @@ export class EventController {
   async createEvent(req:Request, res:Response) {
     try {
       const {name, description, price, date, time, location, availableSeats, ticketType, category, isFree, organizerId } = req.body //{attendees, promotions, reviews}
-      const newEvent = prisma.event.create({
+      const newEvent = await prisma.event.create({
         data: {
           name,
           description,
