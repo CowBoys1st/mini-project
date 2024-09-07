@@ -1,3 +1,4 @@
+'use client'
 import { fetchEvents } from '@/services/eventService';
 import { useEffect, useState } from 'react'
 
