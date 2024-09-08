@@ -16,7 +16,7 @@
     "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "eslint": "^8.48.0",
-    "husky": "^8.0.0",
+    "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
     "prettier": "^3.1.0",
     "tsc-alias": "^1.8.10",
@@ -38,6 +38,7 @@
     "@types/axios": "^0.14.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
+    "didyoumean": "^1.2.2",
     "formik": "^2.4.6",
     "jsonwebtoken": "^9.0.2",
     "yup": "^1.4.0"

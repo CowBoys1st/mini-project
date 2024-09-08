@@ -55,7 +55,7 @@ export default class App {
   private routes(): void {
     const sampleRouter = new SampleRouter();
     const userRouter = new UserRouter();
-    const eventRouter = new EventRouter()
+    const eventRouter = new EventRouter();
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student API!`);
@@ -63,7 +63,8 @@ export default class App {
 
     this.app.use('/api/events', eventRouter.getRouter())
     this.app.use('/api/samples', sampleRouter.getRouter());
-    this.app.use('/api/users', userRouter.getRouter())
+    this.app.use('/api/users', userRouter.getRouter());
+    this.app.use('/api/events', eventRouter.getRouter());
   }
 
   public start(): void {
