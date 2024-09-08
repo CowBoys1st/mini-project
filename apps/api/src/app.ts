@@ -61,6 +61,7 @@ export default class App {
       res.send(`Hello, Purwadhika Student API!`);
     });
 
+    this.app.use('/api/events', eventRouter.getRouter())
     this.app.use('/api/samples', sampleRouter.getRouter());
     this.app.use('/api/users', userRouter.getRouter());
     this.app.use('/api/events', eventRouter.getRouter());
