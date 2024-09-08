@@ -48,6 +48,7 @@ const RegisterForm: React.FC = () => {
           value={formik.values.name}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.name && formik.errors.name ? (
           <div>{formik.errors.name}</div>
@@ -63,6 +64,7 @@ const RegisterForm: React.FC = () => {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.email && formik.errors.email ? (
           <div>{formik.errors.email}</div>
@@ -78,6 +80,7 @@ const RegisterForm: React.FC = () => {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.password && formik.errors.password ? (
           <div>{formik.errors.password}</div>
@@ -93,6 +96,7 @@ const RegisterForm: React.FC = () => {
           value={formik.values.roleId}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.roleId && formik.errors.roleId ? (
           <div>{formik.errors.roleId}</div>
@@ -108,13 +112,14 @@ const RegisterForm: React.FC = () => {
           value={formik.values.referral}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.referral && formik.errors.referral ? (
           <div>{formik.errors.referral}</div>
         ) : null}
       </div>
 
-      <button type="submit">Register</button>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded">Register</button>
     </form>
   );
 };
