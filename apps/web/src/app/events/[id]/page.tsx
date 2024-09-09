@@ -4,13 +4,15 @@ import { IEvent } from "@/type/event";
 import { useParams } from "next/navigation";
 import { useEffect, useState } from "react";
 
+const base_url = process.env.BASE_URL_API || 'http://localhost:8000/api'
+
 const EventDetail = () => {
     const { id } = useParams();
     const [event, setEvent] = useState<IEvent | null>(null);
 
     useEffect(() => {
         if (id) {
-            fetch(`http://localhost:8000/api/events/${id}`)
+            fetch(`${base_url}/events/${id}`)
             .then((response) => response.json())
             .then((data: IEvent) => setEvent(data))
             .catch((error) => console.error('Error fetching event:', error))
