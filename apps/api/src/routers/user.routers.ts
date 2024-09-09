@@ -14,6 +14,9 @@ export class UserRouter {
 
   private initializeRoutes(): void {
     this.router.get('/', this.userController.getUser)
+    this.router.get('/:id', this.userController.getUserById)
+    this.router.get('/:id/discount-coupons', this.userController.getUserDiscountCoupons)
+    this.router.patch('/point',verifyToken, this.userController.getUserPoints)
     this.router.post('/register', this.userController.createUser)
     this.router.post('/login', this.userController.loginUser)
 
