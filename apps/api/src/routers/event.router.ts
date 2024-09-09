@@ -1,5 +1,5 @@
-
 import { EventController } from '@/controllers/event.controller';
+import { isEO, verifyToken } from '@/middlewares/token';
 import { uploader } from '@/middlewares/upload';
 import { Router } from 'express';
 
@@ -14,8 +14,10 @@ export class EventRouter {
   }
 
   private initializeRoutes(): void {
-    this.router.post('/', this.eventController.createEvents);
-    this.router.post('/images', uploader("avatar", "/avatar").single("image"), this.eventController.CreateImage );
+    this.router.get('/', this.eventController.getEvents);
+    this.router.get('/:id', this.eventController.getEventById);
+    this.router.post('/',verifyToken, isEO, this.eventController.createEvents);
+    this.router.post('/images', uploader("event", "/events").single("image"), this.eventController.CreateImage );
   }
 
   getRouter(): Router {

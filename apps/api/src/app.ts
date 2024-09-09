@@ -12,6 +12,9 @@ import { PORT } from './config';
 import { SampleRouter } from './routers/sample.router';
 import { UserRouter } from './routers/user.routers';
 import { EventRouter } from './routers/event.router';
+import { PromotionRouter } from './routers/promotion.router';
+import { TransactionRouter } from './routers/transaction';
+import path from 'path'; 
 
 export default class App {
   private app: Express;
@@ -27,6 +30,7 @@ export default class App {
     this.app.use(cors());
     this.app.use(json());
     this.app.use(urlencoded({ extended: true }));
+    this.app.use('/public', express.static(path.join(__dirname, '../public')));
   }
 
   private handleError(): void {
@@ -56,14 +60,17 @@ export default class App {
     const sampleRouter = new SampleRouter();
     const userRouter = new UserRouter();
     const eventRouter = new EventRouter()
+    const promotionRouter = new PromotionRouter();
+    const transactionRouter = new TransactionRouter()
 
     this.app.get('/api', (req: Request, res: Response) => {
       res.send(`Hello, Purwadhika Student API!`);
     });
-
+    this.app.use('/api/promotions', promotionRouter.getRouter())
     this.app.use('/api/events', eventRouter.getRouter())
     this.app.use('/api/samples', sampleRouter.getRouter());
     this.app.use('/api/users', userRouter.getRouter())
+    this.app.use('/api/transaction', transactionRouter.getRouter())
   }
 
   public start(): void {

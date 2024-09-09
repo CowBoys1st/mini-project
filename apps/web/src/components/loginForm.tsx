@@ -1,9 +1,9 @@
-"use client"
+"use client";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { IUserLogin } from "@/type/user";
 import { loginUser } from "@/lib/user";
-
+import { useRouter } from "next/navigation"; 
 
 const validationSchema = Yup.object({
   email: Yup.string().email("Invalid email address").required("Email is required"),
@@ -11,6 +11,7 @@ const validationSchema = Yup.object({
 });
 
 const LoginForm: React.FC = () => {
+  const router = useRouter(); 
   const formik = useFormik<IUserLogin>({
     initialValues: {
       email: "",
@@ -21,7 +22,9 @@ const LoginForm: React.FC = () => {
       try {
         const response = await loginUser(values);
         if (response.ok) {
-          alert("Login successful");
+          const userId = response.user.id;
+
+          router.push(`/user/${userId}`);
         } else {
           alert("Login failed");
         }
