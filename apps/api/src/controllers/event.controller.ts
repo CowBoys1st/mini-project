@@ -14,7 +14,7 @@ export class EventController {
     }
   }
 
-  async createEvents(req: Request, res: Response) {
+  async createEvent(req: Request, res: Response) {
     const {
       name,
       description,
@@ -25,6 +25,7 @@ export class EventController {
       availableSeats,
       ticketType,
       category,
+      isFree,
       organizerId
     } = req.body;
 
