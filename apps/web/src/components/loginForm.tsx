@@ -42,6 +42,7 @@ const LoginForm: React.FC = () => {
           value={formik.values.email}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.email && formik.errors.email ? (
           <div>{formik.errors.email}</div>
@@ -57,13 +58,14 @@ const LoginForm: React.FC = () => {
           value={formik.values.password}
           onChange={formik.handleChange}
           onBlur={formik.handleBlur}
+          className="border rounded p-2 w-full"
         />
         {formik.touched.password && formik.errors.password ? (
           <div>{formik.errors.password}</div>
         ) : null}
       </div>
 
-      <button type="submit">Login</button>
+      <button type="submit" className="bg-blue-500 text-white p-2 rounded">Login</button>
     </form>
   );
 };
