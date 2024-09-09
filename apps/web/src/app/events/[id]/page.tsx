@@ -43,7 +43,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
     fetchPoints();
   }, [params.id, router]);
 
- 
+ if (!event) return <p>Loading...</p>;
 
   return (
     <div className="p-6 bg-gray-100 min-h-screen">

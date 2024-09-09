@@ -50,6 +50,7 @@ export class EventController {
       availableSeats,
       ticketType,
       category,
+      isFree,
       organizerId
     } = req.body;
 
@@ -77,6 +78,7 @@ export class EventController {
           availableSeats,
           ticketType,
           category,
+          isFree,
           organizer: { connect: { id: organizerId } },
         }
       });
@@ -93,6 +95,7 @@ export class EventController {
       });
     }
   }
+
 
   async CreateImage(req: Request, res: Response) {
     try {

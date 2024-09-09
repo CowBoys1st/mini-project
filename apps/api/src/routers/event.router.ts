@@ -4,14 +4,14 @@ import { uploader } from '@/middlewares/upload';
 import { Router } from 'express';
 
 export class EventRouter {
-  private router: Router;
-  private eventController: EventController;
+    private router: Router;
+    private eventController: EventController;
 
-  constructor() {
-    this.eventController = new EventController();
-    this.router = Router();
-    this.initializeRoutes();
-  }
+    constructor() {
+        this.eventController = new EventController();
+        this.router = Router();
+        this.initializeRoutes();
+    }
 
   private initializeRoutes(): void {
     this.router.get('/', this.eventController.getEvents);
@@ -20,7 +20,7 @@ export class EventRouter {
     this.router.post('/images', uploader("event", "/events").single("image"), this.eventController.CreateImage );
   }
 
-  getRouter(): Router {
-    return this.router;
-  }
+    getRouter(): Router {
+        return this.router;
+    }
 }
