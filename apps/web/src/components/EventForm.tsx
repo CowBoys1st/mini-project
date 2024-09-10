@@ -33,7 +33,7 @@ const EventForm = () => {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         try {
-            const response = await fetch('api/events', {
+            const response = await fetch('http://localhost:8000/api/events/', {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json'},
                 body: JSON.stringify(formData),
