@@ -1,6 +1,6 @@
 'use client';
 
-import MyCoupons from '@/components/Coupons';
+// import MyCoupons from '@/components/Coupons';
 import { getEventsById } from '@/lib/event';
 import { getPoints } from '@/lib/user';
 import { IEventWithImage } from '@/type/event';
@@ -111,7 +111,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
         </div>
       )}
       <div className="flex justify-between">
-        <MyCoupons id={+params.id} />
+        {/* <MyCoupons id={+params.id} /> */}
 
         <div className="points flex gap-5 items-center">
           <h1 className='text-2xl z-10'>My Points:</h1>

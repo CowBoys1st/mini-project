@@ -1,5 +1,4 @@
 export interface IEvent {
-  id: number;
   name: string;
   description: string;
   price: number;
@@ -10,9 +9,6 @@ export interface IEvent {
   ticketType: string;
   category: string;
   isFree: boolean;
-  organizerId: number;
-  createdAt: string;
-  updatedAt: string;
 }
 
 export interface IImage {

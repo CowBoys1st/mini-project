@@ -5,7 +5,11 @@ import prisma from '@/prisma';
 export class EventController {
   async getEvents(req: Request, res: Response) {
     try {
-      const events = await prisma.event.findMany();
+      const events = await prisma.event.findMany({
+        include: {
+          image: true,
+        },
+      });
       return res.status(200).send(events);
     } catch (error) {
       console.error("Error fetching events:", error);
@@ -54,6 +58,7 @@ export class EventController {
       organizerId
     } = req.body;
 
+    console.log(req.body)
     try {
       if (!name || !description || !price || !date || !time || !location || !availableSeats || !category || !organizerId) {
         throw "missing required field"
@@ -105,22 +110,22 @@ export class EventController {
         
         const {eventId} = req.body
         
-        await prisma.image.create({
+        const image = await prisma.image.create({
             data:{
                 eventId:+eventId,
-                url:link
+                url:link,
             }
         })
 
         res.status(200).send({
             status:"ok",
-            msg:"create avatar success!"
+            event: image,
         })
 
     } catch (err) {
         res.status(400).send({
             status:"error",
-            msg:err
+            message: err instanceof Error ? err.message : 'unknown error'
         })
     }
 

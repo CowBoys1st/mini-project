@@ -3,14 +3,14 @@
 import { getDiscountByUserId } from '@/lib/discount';
 import { useState, useEffect } from 'react';
 
-export default function MyCoupons(params) {
+export default function MyCoupons() {
   const [coupons, setCoupons] = useState<any[]>([]);
   const [copySuccess, setCopySuccess] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchCoupons = async () => {
       try {
-        const userId = id; 
+        const userId = 1; 
         const data = await getDiscountByUserId(userId);
         setCoupons(data.user.discountCoupons);
       } catch (error) {
@@ -65,3 +65,5 @@ export default function MyCoupons(params) {
     </div>
   );
 }
+
+
