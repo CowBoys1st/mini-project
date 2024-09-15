@@ -10,6 +10,19 @@ export interface IEvent {
   category: string;
   isFree: boolean;
 }
+export interface IEventList {
+  id: number;
+  name: string;
+  description: string;
+  price: number;
+  date: string;
+  time: string;
+  location: string;
+  availableSeats: number;
+  ticketType: string;
+  category: string;
+  isFree: boolean;
+}
 
 export interface IImage {
   id: number;
