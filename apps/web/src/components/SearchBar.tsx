@@ -25,7 +25,7 @@ const SearchBar: React.FC<SearhcBarProps> = ({ onSearch }) => {
     }, [debouncedTerm, onSearch]);
 
     return (
-        <input type="text" placeholder="Search events" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border rounded-md px-4 py-2 shadow-md text-gray-900" />
+        <input type="text" placeholder="Search events" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border rounded-lg my-4 px-4 py-2 shadow-md text-gray-900" />
     )
 }
 

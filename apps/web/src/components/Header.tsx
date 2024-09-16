@@ -21,22 +21,12 @@ export const Header = () => {
 
   const showAuthButtons = !(pathname === '/login' || pathname === '/register')
 
-  //kode untuk searchbar
-  const [searchResults, setSearchResults] = useState([]);
-
-  const handleSearch = (term: string) => {
-    console.log('search:term', term)
-  };
-
   return (
     <header className="bg-blue-500 text-white p-4">
       <nav className="container mx-auto flex justify-between items-center">
         <Link href="/" className="text-xl font-bold">
           Tiket Murah
         </Link>
-        <div className="ml-4">
-          <SearchBar onSearch={handleSearch} />
-        </div>
         <ul className="flex space-x-4">
           <li><Link href="/events">Events</Link></li>
           <li><Link href="/about">About</Link></li>
