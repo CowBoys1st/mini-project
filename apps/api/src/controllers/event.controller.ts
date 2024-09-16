@@ -60,7 +60,7 @@ export class EventController {
 
     console.log(req.body)
     try {
-      if (!name || !description || !price || !date || !time || !location || !availableSeats || !category || !organizerId) {
+      if (!name || !description || price === undefined || !date || !time || !location || !availableSeats || !category || !organizerId) {
         throw "missing required field"
       }
 
