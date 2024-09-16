@@ -48,12 +48,27 @@ export class UserController {
     }
   }
 
+  async getUserbyToken (req:Request, res:Response) {
+    try {
+      const id = req.user?.userId
+      const user = await prisma.user.findUnique({
+        where:{id:Number(id)}
+      })
+
+      return res.status(200).send({user})
+    } catch (err) {
+      return res.status(400).send({status:"err", msg:err})
+    }
+  }
+
   async getUserDiscountCoupons(req: Request, res: Response) {
     const userId = parseInt(req.params.id)
+    console.log(userId);
+    
   
     try {
       const user:UserWithDiscountCoupons | null = await prisma.user.findUnique({
-        where: { id: userId },
+        where: { id: req.user?.userId },
         include: {
           discountCoupons: true,
         },
@@ -225,6 +240,21 @@ export class UserController {
     } catch (error) {
       console.error(error);
       return res.status(500).json({ message: "Something went wrong" })
+    }
+  }
+
+  async deleteUserPoints (req:Request, res:Response) {
+    try {
+      const id = req.user?.userId
+
+      await prisma.referral.deleteMany({
+        where:{referredUserId:id}
+      })
+
+      return res.status(200).send({status:"ok", msg:"delete Points success"})
+    } catch (err) {
+      console.log(err);
+      return res.status(500).send({message:"error deleting points"})
     }
   }
   

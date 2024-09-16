@@ -65,7 +65,8 @@ export class EventController {
       }
 
       const userExists = await prisma.user.findUnique({
-        where: { id: organizerId }
+        where: { id: organizerId },
+        
       });
 
       if (!userExists) {
@@ -129,5 +130,22 @@ export class EventController {
         })
     }
 
+  }
+
+  async getEventByEoId(req:Request, res:Response) {
+    try {
+      const userId= req.user?.userId
+
+      const events = await prisma.event.findMany({
+        where:{
+          organizerId:userId
+        },
+        include:{Ticket:true, reviews:true}
+      })
+      return res.status(200).send({events})
+
+    } catch (err) {
+      
+    }
   }
 }

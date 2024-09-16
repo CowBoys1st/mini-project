@@ -1,4 +1,5 @@
 export interface IEvent {
+  id:number,
   name: string;
   description: string;
   price: number;
@@ -39,4 +40,14 @@ export interface IEventWithImage {
 export interface EventResponse {
   status: string;
   event: Event;
+}
+
+export interface EventTransaction {
+  id: number;
+  eventId: number;
+  userId: number;
+  price: number;
+  ticketType: string | null;
+  createdAt: string; 
+  isPaid: boolean;
 }

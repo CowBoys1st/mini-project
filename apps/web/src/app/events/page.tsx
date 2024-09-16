@@ -1,7 +1,6 @@
 'use client';
 
 import { getEvents } from '@/lib/event';
-import { getPoints } from '@/lib/user';
 import { IEvent } from '@/type/event';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
