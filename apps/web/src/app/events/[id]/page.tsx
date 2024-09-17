@@ -85,8 +85,8 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
   };
 
   const handlePayment = async () => {
-    const token = localStorage.getItem("token");
-    console.log("cek transaksi:", transaction);
+    const token = localStorage.getItem('token');
+    console.log('cek transaksi:', transaction);
     try {
       const response = await fetch(
         `http://localhost:8000/api/transaction/${transaction.id}`,
@@ -94,7 +94,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -121,20 +121,19 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
         <p className="text-center">Loading event details...</p>
       ) : (
         <div>
-          <EventDetails event={event} onClick2={handleBuyTicket}/>
-
+          <EventDetails event={event} onClick2={handleBuyTicket} />
         </div>
       )}
-      <div className="flex justify-between">
+      <div className="flex justify-between my-3">
         {coupons.length === 0 ? (
           <div>Tidak ada kupon</div>
         ) : (
           <MyCoupons id={+params.id} coupons={coupons as DiscountCoupon[]} />
         )}
 
-        <div className="points flex gap-5 items-center">
-          <h1 className="text-2xl z-10">My Points:</h1>
-          <p className="bg-yellow-400 text-red-500 h-fit text-3xl p-2 rounded-lg">
+        <div className="points flex flex-col md:flex-row gap-2 md:gap-5 items-center bg-white p-4 rounded-lg shadow-md">
+          <h1 className="text-lg md:text-2xl text-gray-700">My Points:</h1>
+          <p className="bg-yellow-400 text-red-500 text-xl md:text-3xl p-2 rounded-lg">
             {points}
           </p>
         </div>
@@ -175,7 +174,6 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       )}
-
     </div>
   );
 };
