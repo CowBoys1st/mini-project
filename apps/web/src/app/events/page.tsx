@@ -2,8 +2,7 @@
 import { FiImage } from 'react-icons/fi';
 import styles from './page.module.css';
 import { getEvents } from '@/lib/event';
-import { getPoints } from '@/lib/user';
-import { IEvent, IEventList } from '@/type/event';
+import { IEvent } from '@/type/event';
 import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SearchBar from '@/components/SearchBar';

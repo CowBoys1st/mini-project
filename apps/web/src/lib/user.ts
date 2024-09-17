@@ -1,5 +1,6 @@
 'use client';
 
+import { Event } from '@/type/chart';
 import { IUserLogin, IUserReg } from '@/type/user';
 
 const base_url = process.env.BASE_URL_API || 'http://localhost:8000/api';
@@ -82,6 +83,8 @@ export const getPoints = async () => {
       },
     });
 
+    
+    
     const data = await response.json();
 
     if (!response.ok) {
@@ -96,4 +99,78 @@ export const getPoints = async () => {
 };
 
 
+export const deletePoints = async()=>{
+  const token = localStorage.getItem("token")
 
+  if (!token) throw "no token found"
+
+  try {
+    const response = await fetch ('http://localhost:8000/api/users/point', {
+      method:"DELETE",
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    const data = await response.json()
+
+    return data;
+  } catch (err) {
+    console.log("error fetching delete points:", err);
+    
+  }
+}
+
+export const getUserEvents = async () => {
+  const token = localStorage.getItem('token')
+
+  try {
+    const response = await fetch('http://localhost:8000/api/events/eo/eo', {
+      method:"GET",
+      headers:{
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`
+      }
+    })
+
+    const data = await response.json()
+    console.log(data.events);
+    
+
+    return data
+
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+export const verifyToken = async () => {
+  const token = localStorage.getItem("token");
+
+  if (!token) {
+    console.log("No token found");
+    return null;
+  }
+
+  try {
+    const response = await fetch('http://localhost:8000/api/users/get/token', {
+      method: "GET",
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${token}`,
+      },
+    });
+
+    if (!response.ok) {
+      throw new Error("Failed to verify token");
+    }
+
+    const data = await response.json();
+
+    return data;
+  } catch (error) {
+    console.error("Error verifying token:", error);
+    return null; 
+  }
+};
