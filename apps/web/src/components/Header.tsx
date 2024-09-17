@@ -51,11 +51,6 @@ export const Header = () => {
           Tiket Murah
         </Link>
 
-        {/* Search Bar */}
-        <div className="ml-4">
-          <SearchBar onSearch={handleSearch} />
-        </div>
-
         {/* Navigation Links */}
         <ul className="flex space-x-4">
           <li>
@@ -78,7 +73,7 @@ export const Header = () => {
           ) : (
             showAuthButtons && (
               <button
-                className="bg-red-600 text-white px-4 py-2 rounded"
+                className="bg-red-600 text-white px-4 py-2 rounded-full"
                 onClick={handleSlideToggle}
               >
                 Log in / Sign up

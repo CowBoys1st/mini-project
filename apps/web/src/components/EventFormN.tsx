@@ -1,10 +1,7 @@
 'use client';
-import { IEvent } from '@/type/event';
+import { IEventCreate } from '@/type/event';
 import { useFormik } from 'formik';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
-import { availableParallelism } from 'os';
-import { useState } from 'react';
 import * as Yup from 'yup';
 
 const validationSchema = Yup.object({
@@ -29,10 +26,9 @@ const validationSchema = Yup.object({
 });
 
 const EventFormN = () => {
-  const [images, setImages] = useState<File[]>([]);
   const router = useRouter();
 
-  const formik = useFormik<IEvent>({
+  const formik = useFormik<IEventCreate>({
     initialValues: {
       name: '',
       description: '',
@@ -47,9 +43,6 @@ const EventFormN = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
-        console.log("Form Values:", values)
-
-        console.log("images: ", images)
       const token = localStorage.getItem('token');
       const combinedDateTime = new Date(`${values.date}T${values.time}:00`).toISOString();
 
@@ -59,14 +52,13 @@ const EventFormN = () => {
         price: values.isFree ? 0 : values.price,
         availableSeats: Number(values.availableSeats),
       }
-
-      console.log("FormData prepared: ", eventData)
-
+      
+      // console.log("Form Values:", JSON.stringify(eventData) )
       try {
         const response = await fetch('http://localhost:8000/api/events', {
           method: 'POST',
           headers: {
-            'Content-Type': 'aplication/json',
+            'Content-Type': 'application/json',
             Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify(eventData),
@@ -78,26 +70,18 @@ const EventFormN = () => {
 
         const result = await response.json();
         console.log("Server Response:", result)
+        const eventId = result.newEvent.id
 
-        router.push(`events/${result.id}`);
+        if (!eventId) {
+          throw new Error('event ID is missing from the server response')
+        }
+        router.push(`events/${eventId}`);
       } catch (error) {
         console.error("Error creating event:",error);
         alert('Error creating event');
       }
     },
   });
-
-  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.files) {
-      const newImages = Array.from(e.target.files);
-      setImages([...images, ...newImages]);
-    }
-  };
-
-  const HandleRemoveImage = (index: number) => {
-    const newImages = images.filter((_, i) => i !== index);
-    setImages(newImages);
-  };
 
   return (
     <form
@@ -246,38 +230,6 @@ const EventFormN = () => {
           onChange={(e) => formik.setFieldValue('isFree', e.target.checked)}
           className="w-6 h-6 border-gray-300 rounded-md"
         />
-      </div>
-
-      <div>
-        <label className="block text-gray-600">Upload Images</label>
-        <input
-          type="file"
-          accept="image/*"
-          multiple
-          onChange={handleImageChange}
-          className="mt-2"
-        />
-        <div className="flex space-x-2 mt-2">
-          {images.map((image, index) => (
-            <div key={index} className="relative">
-              <Image
-                src={URL.createObjectURL(image)}
-                alt="preview"
-                width={100}
-                height={100}
-                className="object-cover rounded-md"
-              />
-              <button
-                type="button"
-                onClick={() => HandleRemoveImage(index
-                )}
-                className="absolute top-0 right-0 bg-red-500 text-white rounded-full p-1 text-xs hover:bg-red-700"
-              >
-                X
-              </button>
-            </div>
-          ))}
-        </div>
       </div>
 
       {!formik.values.isFree && (

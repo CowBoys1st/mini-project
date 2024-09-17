@@ -57,12 +57,14 @@ export class EventController {
 
     console.log(req.body);
     try {
-      if (!name || !description || price === undefined || !date || !time || !location || !availableSeats || !category || !organizerId) {
+      if (!name || !description || price === undefined || !date || !time || !location || !availableSeats || !category) {
         throw "missing required field"
       }
 
+      const userId = req.user?.userId
+
       const userExists = await prisma.user.findUnique({
-        where: { id: organizerId },        
+        where: { id: userId },        
       });
       if (!userExists) {
         throw 'Event Organizer not found';
@@ -80,7 +82,7 @@ export class EventController {
           ticketType,
           category,
           isFree,
-          organizer: { connect: { id: organizerId } },
+          organizer: { connect: { id: userId } },
         },
       });
 
@@ -99,7 +101,7 @@ export class EventController {
   async CreateImage(req: Request, res: Response) {
     try {
       if (!req.file) throw 'no file uploaded'; // dapat dari middleware upload.ts
-      const link: string = `http://localhost:8000/api/public/events/${req.file?.filename}`;
+      const link: string = `http://localhost:8000/public/events/${req.file?.filename}`;
       console.log(link);
 
       const { eventId } = req.body;

@@ -11,7 +11,6 @@ import { checkTransaction } from '@/lib/transaction';
 import { getPoints } from '@/lib/user';
 import { EventTransaction, IEventWithImage } from '@/type/event';
 import { ApiResponse, DiscountCoupon } from '@/type/user';
-import { IEventWithImage } from '@/type/event';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
@@ -87,6 +86,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
 
   const handlePayment = async () => {
     const token = localStorage.getItem("token");
+    console.log("cek transaksi:", transaction);
     try {
       const response = await fetch(
         `http://localhost:8000/api/transaction/${transaction.id}`,
@@ -121,13 +121,8 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
         <p className="text-center">Loading event details...</p>
       ) : (
         <div>
-          <EventDetails event={event} />
-          <button
-            onClick={handleBuyTicket}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors"
-          >
-            Buy Ticket
-          </button>
+          <EventDetails event={event} onClick2={handleBuyTicket}/>
+
         </div>
       )}
       <div className="flex justify-between">

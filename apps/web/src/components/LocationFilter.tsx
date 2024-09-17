@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { AiFillEnvironment } from 'react-icons/ai';
 
 const cities = [
   'All Locations',
@@ -31,9 +32,11 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
       <div>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="inline-flex justify-center w-full rounded-xl border border-blue-500 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className="inline-flex items-center justify-center md:w-48 w-auto rounded-full border border-blue-500 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
         >
-          {selectedLocation}
+          <AiFillEnvironment className='mr-2 text-2xl' />
+          <span className='hidden sm:inline'>{selectedLocation}</span>
+          
           <svg
             className="ml-2 h-5 w-5"
             xmlns="http://www.w3.org/2000/svg"
