@@ -72,7 +72,7 @@ model DiscountCoupon {
 model Event {
   id                Int                @id @default(autoincrement())
   name              String
-  description       String
+  description       String             @db.Text
   price             Int                
   date              DateTime
   time              String
@@ -86,9 +86,19 @@ model Event {
   attendees         EventTransaction[]
   promotions        Promotion[]
   reviews           Review[]
+  image             Image[]
   createdAt         DateTime           @default(now())
   updatedAt         DateTime           @updatedAt
 }
+
+model Image {
+  id        Int      @id @default(autoincrement())
+  url       String 
+  eventId   Int      //image ini untuk event id tercantum
+  event     Event    @relation(fields: [eventId], references: [id])
+  createdAt DateTime @default(now())
+}
+
 
 model EventTransaction {
   id                Int                @id @default(autoincrement())
@@ -103,10 +113,11 @@ model EventTransaction {
 
 model Promotion {
   id                Int                @id @default(autoincrement())
-  eventId           Int
-  discountValue     Int                
-  referralCode      String
-  maxUsage          Int
+  eventId           Int                                 //event mana yang ada promonya.
+  discountValue     Int                                 //integer di convert ke % 
+  PromotionCode     String            @unique           //kode buat dapet promo nya macem klaim promo di shopee
+  maxUsage          Int                                 //maksimum dipake berapa kali
+  used              Int               @default(0)       //udah dipake berapa kali
   expiresAt         DateTime
   createdAt         DateTime           @default(now())
   event             Event              @relation(fields: [eventId], references: [id])

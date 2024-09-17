@@ -38,6 +38,9 @@
     "@types/axios": "^0.14.0",
     "axios": "^1.7.2",
     "bcrypt": "^5.1.1",
-    "jsonwebtoken": "^9.0.2"
+    "didyoumean": "^1.2.2",
+    "formik": "^2.4.6",
+    "jsonwebtoken": "^9.0.2",
+    "yup": "^1.4.0"
   }
 }
