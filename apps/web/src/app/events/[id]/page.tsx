@@ -4,11 +4,15 @@ import MyCoupons from '@/components/coupons';
 import EventDetails from '@/components/eventDetail';
 import Modal from '@/components/modals';
 import { getDiscountByUserId } from '@/lib/discount';
+import { AiFillCalendar, AiFillEnvironment } from 'react-icons/ai';
+import { FiImage } from 'react-icons/fi';
 import { getEventsById } from '@/lib/event';
 import { checkTransaction } from '@/lib/transaction';
 import { getPoints } from '@/lib/user';
 import { EventTransaction, IEventWithImage } from '@/type/event';
 import { ApiResponse, DiscountCoupon } from '@/type/user';
+import { IEventWithImage } from '@/type/event';
+import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
 
@@ -111,7 +115,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
   if (!event) return <p>Loading...</p>;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen container mx-auto">
       <h1 className="text-4xl font-bold mb-6 text-center">Event Details</h1>
       {!event ? (
         <p className="text-center">Loading event details...</p>
@@ -176,6 +180,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
           </div>
         </div>
       )}
+
     </div>
   );
 };
