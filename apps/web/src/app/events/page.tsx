@@ -8,6 +8,8 @@ import Link from 'next/link';
 import { useEffect, useState } from 'react';
 import SearchBar from '@/components/SearchBar';
 import LocationFilter from '@/components/LocationFilter';
+import { useRouter, useSearchParams } from 'next/navigation';
+import { useDebounce } from 'use-debounce';
 
 const categories = [
   'ALL',
@@ -21,10 +23,14 @@ const categories = [
 ];
 
 const EventsPage = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
+  const querySearch = searchParams.get('search')
   const [events, setEvents] = useState<IEventList[]>([]);
-  const [searchQuery, setSearchQuery] = useState('')
+  const [searchQuery, setSearchQuery] = useState(querySearch || '');
   const [selectedLocation, setSelectedLocation] = useState('All Locations')
   const [selectedCategory, setSelectedCategory] = useState('ALL');
+  const [debouncedSearchQuery] = useDebounce(searchQuery, 1000);
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -38,6 +44,15 @@ const EventsPage = () => {
 
     fetchEvents();
   }, []);
+
+  useEffect(() => {
+    const fetchFilteredEvents = async () => {
+      router.push(`?search=${debouncedSearchQuery}`)
+    }
+
+    fetchFilteredEvents()
+  }, [debouncedSearchQuery]);
+
 
   const filteredEventByLocation = events.filter((event) => {
     const isLocationMatch =
@@ -79,7 +94,7 @@ const EventsPage = () => {
             onClick={() => setSelectedCategory(category)}
             className={`py-2 px-4 rounded-lg font-semibold ${
               selectedCategory === category
-                ? 'bg-blue-500 text-white'
+                ? 'bg-red-600 text-white'
                 : 'bg-gray-200'
             }`}
           >

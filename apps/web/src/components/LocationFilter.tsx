@@ -31,7 +31,7 @@ const LocationFilter: React.FC<LocationFilterProps> = ({
       <div>
         <button
           onClick={() => setIsDropdownOpen(!isDropdownOpen)}
-          className="inline-flex justify-center w-full rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
+          className="inline-flex justify-center w-full rounded-xl border border-blue-500 shadow-sm px-4 py-2 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50 focus:outline-none"
         >
           {selectedLocation}
           <svg
