@@ -14,6 +14,7 @@ import { ApiResponse, DiscountCoupon } from '@/type/user';
 import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ReviewForm from '@/components/ReviewForm';
 
 const EventsPage = ({ params }: { params: { id: string } }) => {
   const [event, setEvent] = useState<IEventWithImage | null>(null);
@@ -137,6 +138,9 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
             {points}
           </p>
         </div>
+      </div>
+      <div>
+        <ReviewForm eventId={event.id}/>
       </div>
 
       <Modal
