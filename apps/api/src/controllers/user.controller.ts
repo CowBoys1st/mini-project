@@ -119,7 +119,7 @@ export class UserController {
           email,
           password: hashedPassword,
           name,
-          roleId,
+          roleId:+roleId,
         },
       });
 

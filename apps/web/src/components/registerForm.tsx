@@ -30,19 +30,23 @@ const RegisterForm: React.FC = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+      console.log(JSON.stringify(values));
+      
       try {
         const response = await regUser(values);
-        if (response.ok) {
-          alert('User registered successfully');
-          router.push('/login');
-        } else {
-          alert('Registration failed');
-        }
-      } catch (error) {
+        console.log("formik", response);
+        
+        if (response.error) throw response.error;
+        
+        alert("Account has created")
+        router.push('/login');
+      } catch (error: any) {
+        alert(`Registration failed: ${error}`);
         console.error('Registration error: ', error);
       }
     },
   });
+  
 
   return (
     <div className="max-w-lg mx-auto bg-white p-8 rounded-lg shadow-lg">
