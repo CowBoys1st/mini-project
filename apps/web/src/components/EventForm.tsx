@@ -45,6 +45,8 @@ const EventForm = () => {
     },
     validationSchema,
     onSubmit: async (values) => {
+
+      console.log('Form Values on Submit:', values);
       const token = localStorage.getItem('token');
       const combinedDateTime = new Date(
         `${values.date}T${values.time}:00`,

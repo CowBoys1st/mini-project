@@ -78,7 +78,7 @@ export class EventController {
         throw 'Event Organizer not found';
       }
 
-      const freeEvent = isFree === 'true';
+      const isFree = req.body.isFree === 'true';
 
       const newEvent = await prisma.event.create({
         data: {
@@ -91,7 +91,7 @@ export class EventController {
           availableSeats: Number(availableSeats),
           ticketType,
           category,
-          isFree: freeEvent,
+          isFree,
           organizer: { connect: { id: userId } },
         },
       });
