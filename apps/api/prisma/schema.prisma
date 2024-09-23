@@ -31,104 +31,120 @@ model Sample {
 }
 
 model User {
-  id                Int                @id @default(autoincrement())
-  email             String             @unique
-  password          String
-  name              String
-  roleId            Int               // 1 costumers, 2 eventOrganizer
-  referralNumber    String             @unique @default(uuid())
-  points            Int                @default(0)
-  referredUsers     Referral[]         @relation("ReferredUsers")
-  discountCoupons   DiscountCoupon[]
-  transactions      EventTransaction[] @relation("UserTransactions")
-  createdEvents     Event[]            @relation("CreatedEvents")
-  reviews           Review[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id              Int                @id @default(autoincrement())
+  email           String             @unique
+  password        String
+  name            String
+  roleId          Int // 1 costumers, 2 eventOrganizer
+  referralNumber  String             @unique @default(uuid())
+  points          Int                @default(0)
+  referredUsers   Referral[]         @relation("ReferredUsers")
+  discountCoupons DiscountCoupon[]
+  transactions    EventTransaction[] @relation("UserTransactions")
+  createdEvents   Event[]            @relation("CreatedEvents")
+  reviews         Review[]
+  Ticket          Ticket[]
+  createdAt       DateTime           @default(now())
+  updatedAt       DateTime           @updatedAt
 }
 
 model Referral {
-  id                Int       @id @default(autoincrement())
-  referralNumber    String
-  userId            Int
-  referredUserId    Int
-  pointsGenerated   Int       @default(10000)
-  expiresAt         DateTime
-  createdAt         DateTime  @default(now())
-  referredUser      User      @relation("ReferredUsers", fields: [referredUserId], references: [id])
+  id              Int      @id @default(autoincrement())
+  referralNumber  String
+  userId          Int
+  referredUserId  Int
+  pointsGenerated Int      @default(10000)
+  expiresAt       DateTime
+  createdAt       DateTime @default(now())
+  referredUser    User     @relation("ReferredUsers", fields: [referredUserId], references: [id])
 }
 
 model DiscountCoupon {
-  id              Int        @id @default(autoincrement())
-  userId          Int
-  code            String     @unique @default(uuid())
-  discountValue   Int        @default(10) 
-  expiresAt       DateTime
-  used            Boolean    @default(false)
-  createdAt       DateTime   @default(now())
-  user            User       @relation(fields: [userId], references: [id])
+  id            Int      @id @default(autoincrement())
+  userId        Int
+  code          String   @unique @default(uuid())
+  discountValue Int      @default(10)
+  expiresAt     DateTime
+  used          Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  user          User     @relation(fields: [userId], references: [id])
 }
 
 model Event {
-  id                Int                @id @default(autoincrement())
-  name              String
-  description       String
-  price             Int                
-  date              DateTime
-  time              String
-  location          String
-  availableSeats    Int
-  ticketType        String?
-  category          EventCategory
-  isFree            Boolean            @default(false)
-  organizerId       Int
-  organizer         User               @relation("CreatedEvents", fields: [organizerId], references: [id])
-  attendees         EventTransaction[]
-  promotions        Promotion[]
-  reviews           Review[]
-  image             Image[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  id             Int                @id @default(autoincrement())
+  name           String
+  description    String             @db.Text
+  price          Int
+  date           DateTime
+  time           String
+  location       String
+  availableSeats Int
+  ticketType     String?
+  category       EventCategory
+  isFree         Boolean            @default(false)
+  organizerId    Int
+  organizer      User               @relation("CreatedEvents", fields: [organizerId], references: [id])
+  attendees      EventTransaction[]
+  promotions     Promotion[]
+  reviews        Review[]
+  image          Image[]
+  createdAt      DateTime           @default(now())
+  updatedAt      DateTime           @updatedAt
+  Ticket         Ticket[]
 }
 
 model Image {
   id        Int      @id @default(autoincrement())
-  url       String 
-  eventId   Int
+  url       String
+  eventId   Int //image ini untuk event id tercantum
   event     Event    @relation(fields: [eventId], references: [id])
   createdAt DateTime @default(now())
 }
 
-
 model EventTransaction {
-  id                Int                @id @default(autoincrement())
-  eventId           Int
-  userId            Int
-  price             Int               
-  ticketType        String?
-  createdAt         DateTime           @default(now())
-  event             Event             @relation(fields: [eventId], references: [id], onDelete: Cascade)
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserTransactions")
+  id         Int      @id @default(autoincrement())
+  eventId    Int
+  userId     Int
+  price      Int
+  ticketType String?  @default("regural")
+  createdAt  DateTime @default(now())
+  event      Event    @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade, name: "UserTransactions")
+  isPaid     Boolean  @default(false)
 }
 
+model Ticket {
+  id            Int              @id @default(autoincrement())
+  eventId       Int
+  userId        Int
+  ticketType    String           @default("regural")
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+  event         Event            @relation(fields: [eventId], references: [id], onDelete: Cascade)
+  user          User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+
+
 model Promotion {
-  id                Int                @id @default(autoincrement())
-  eventId           Int
-  discountValue     Int                
-  referralCode      String
-  maxUsage          Int
-  expiresAt         DateTime
-  createdAt         DateTime           @default(now())
-  event             Event              @relation(fields: [eventId], references: [id])
+  id            Int      @id @default(autoincrement())
+  eventId       Int //event mana yang ada promonya.
+  discountValue Int //integer di convert ke % 
+  PromotionCode String   @unique //kode buat dapet promo nya macem klaim promo di shopee
+  maxUsage      Int //maksimum dipake berapa kali
+  used          Int      @default(0) //udah dipake berapa kali
+  expiresAt     DateTime
+  createdAt     DateTime @default(now())
+  event         Event    @relation(fields: [eventId], references: [id])
 }
 
 model Review {
-  id                Int                @id @default(autoincrement())
-  eventId           Int
-  userId            Int
-  rating            Int                
-  comment           String
-  createdAt         DateTime           @default(now())
-  event             Event              @relation(fields: [eventId], references: [id])
-  user              User               @relation(fields: [userId], references: [id])
+  id        Int      @id @default(autoincrement())
+  eventId   Int
+  userId    Int
+  rating    Int
+  comment   String
+  createdAt DateTime @default(now())
+  event     Event    @relation(fields: [eventId], references: [id])
+  user      User     @relation(fields: [userId], references: [id])
 }

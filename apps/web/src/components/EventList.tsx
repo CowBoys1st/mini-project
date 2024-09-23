@@ -1,11 +1,12 @@
 'use client'
+
 import { fetchEvents } from '@/services/eventService';
-import { IEvent } from '@/type/event';
+import { IEventList } from '@/type/event';
 import Link from 'next/link';
 import { useEffect, useState } from 'react'
 
 const EventList = () => {
-  const [events, setEvents] = useState<IEvent[]>([]);
+  const [events, setEvents] = useState<IEventList[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 

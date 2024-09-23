@@ -1,32 +1,27 @@
-import { useEffect, useState } from "react";
+import { useRef } from 'react';
 
-interface SearhcBarProps {
-    onSearch: (term: string) => void;
+interface SearchBarProps {
+  onSearch: (query: string) => void;
 }
 
-const SearchBar: React.FC<SearhcBarProps> = ({ onSearch }) => {
-    const [searchTerm, setSearchTerm] = useState("");
-    const [debouncedTerm, setDebouncedTerm] = useState(searchTerm);
+const SearchBar: React.FC<SearchBarProps> = ({ onSearch }) => {
+  const searchRef = useRef<HTMLInputElement | null>(null);
 
-    useEffect(() => {
-        const handler = setTimeout(() => {
-            setDebouncedTerm(searchTerm);
-        }, 300);
+  const handleChange = () => {
+    if (searchRef.current) {
+      onSearch(searchRef.current.value);
+    }
+  };
 
-        return () => {
-            clearTimeout(handler);
-        }
-    }, [searchTerm])
-
-    useEffect(() => {
-        if (debouncedTerm) {
-            onSearch(debouncedTerm);
-        }
-    }, [debouncedTerm, onSearch]);
-
-    return (
-        <input type="text" placeholder="Search events" value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} className="border rounded-md px-4 py-2 shadow-md text-gray-900" />
-    )
-}
+  return (
+    <input
+      ref={searchRef}
+      onChange={handleChange}
+      type="search"
+      className="border p-2 border-gray-500 h-10 w-full max-w-[300px] rounded-md"
+      placeholder="Search events"
+    />
+  );
+};
 
 export default SearchBar;

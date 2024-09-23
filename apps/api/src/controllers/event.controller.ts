@@ -1,20 +1,46 @@
 import { Request, Response } from 'express';
 import prisma from '@/prisma';
 
-
-
 export class EventController {
   async getEvents(req: Request, res: Response) {
     try {
-      const events = await prisma.event.findMany();
+      const events = await prisma.event.findMany({
+        include: {
+          image: true,
+        },
+      });
       return res.status(200).send(events);
     } catch (error) {
-      console.error("Error fetching events:", error);
-      return res.status(500).json({ message: "Internal server error" });
+      console.error('Error fetching events:', error);
+      return res.status(500).json({ message: 'Internal server error' });
     }
   }
 
-  async createEvent(req: Request, res: Response) {
+  async getEventById(req: Request, res: Response) {
+    const id: number = +req.params.id;
+    try {
+      const event = await prisma.event.findUnique({
+        where: { id: id },
+        include: {
+          image: true,
+        },
+      });
+
+      if (!event) throw 'event not found';
+
+      return res.status(200).send({
+        status: 'ok',
+        event,
+      });
+    } catch (error) {
+      return res.status(400).send({
+        status: 'error',
+        msg: error,
+      });
+    }
+  }
+
+  async createEvents(req: Request, res: Response) {
     const {
       name,
       description,
@@ -26,90 +52,126 @@ export class EventController {
       ticketType,
       category,
       isFree,
-      organizerId
     } = req.body;
 
+    console.log(req.body);
     try {
-      if (!name || !description || !price || !date || !time || !location || !availableSeats || !category || !organizerId) {
-        return res.status(400).json({ message: "Missing required fields" });
+      if (
+        !name ||
+        !description ||
+        price === undefined ||
+        !date ||
+        !time ||
+        !location ||
+        !availableSeats ||
+        !category
+      ) {
+        throw 'missing required field';
       }
+
+      const userId = req.user?.userId;
 
       const userExists = await prisma.user.findUnique({
-        where: { id: organizerId }
+        where: { id: userId },
       });
-
       if (!userExists) {
-        return res.status(400).json({ message: "Organizer not found" });
+        throw 'Event Organizer not found';
       }
+
+      const freeEvent = isFree === 'true';
 
       const newEvent = await prisma.event.create({
         data: {
           name,
           description,
-          price,
+          price: isFree ? 0 : Number(price),
           date: new Date(date),
           time,
           location,
-          availableSeats,
+          availableSeats: Number(availableSeats),
           ticketType,
           category,
-          isFree,
-          organizer: { connect: { id: organizerId } },
+          isFree: freeEvent,
+          organizer: { connect: { id: userId } },
         },
-      })
-      return res.status(201).json(newEvent);
-    } catch (error) {
-      console.error("Error creating event:", error);
-      return res.status(500).json({ message: "Internal server error" });
-    }
-  }
+      });
 
-  async getEventById(req: Request, res: Response) {
-    const { id } = req.params;
+      // const newEvent = await prisma.event.create({
+      //   data: {
+      //     name,
+      //     description,
+      //     price,
+      //     date: new Date(date),
+      //     time,
+      //     location,
+      //     availableSeats,
+      //     ticketType,
+      //     category,
+      //     isFree,
+      //     organizer: { connect: { id: userId } },
+      //   },
+      // });
 
-    try {
-      const event = await prisma.event.findUnique({
-        where: {
-          id: Number(id),
-        }
-      })
-
-      if (!event) {
-        return res.status(404).json({ message: 'Event not found'});
+      if (req.file) {
+        const link: string = `http://localhost:8000/public/events/${req.file.filename}`;
+        await prisma.image.create({
+          data: {
+            eventId: newEvent.id,
+            url: link,
+          },
+        });
       }
 
-      return res.json(event);
+      return res.status(201).send({
+        status: 'ok',
+        newEvent,
+      });
     } catch (error) {
-      return res.status(500).json({ message: 'Error fetching event', error})
+      return res.status(500).send({
+        status: 'error',
+        message: 'Internal server error',
+      });
     }
   }
 
   async CreateImage(req: Request, res: Response) {
     try {
-        if (!req.file) throw 'no file uploaded' // dapat dari middleware upload.ts 
-        const link:string = `http://localhost:8000/api/public/avatar/${req.file?.filename}`
-        console.log(link)
-        
-        const {eventId} = req.body
-        
-        await prisma.image.create({
-            data:{
-                eventId:+eventId,
-                url:link
-            }
-        })
+      if (!req.file) throw 'no file uploaded'; // dapat dari middleware upload.ts
+      const link: string = `http://localhost:8000/public/events/${req.file?.filename}`;
+      console.log(link);
 
-        res.status(200).send({
-            status:"ok",
-            msg:"create avatar success!"
-        })
+      const { eventId } = req.body;
 
+      const image = await prisma.image.create({
+        data: {
+          eventId: +eventId,
+          url: link,
+        },
+      });
+
+      res.status(200).send({
+        status: 'ok',
+        event: image,
+      });
     } catch (err) {
-        res.status(400).send({
-            status:"error",
-            msg:err
-        })
+      res.status(400).send({
+        status: 'error',
+        message: err instanceof Error ? err.message : 'unknown error',
+      });
     }
+  }
 
+  async getEventByEoId(req: Request, res: Response) {
+    try {
+      const userId = req.user?.userId;
+
+      const events = await prisma.event.findMany({
+        where: {
+          organizerId: userId,
+        },
+        include: { Ticket: true, reviews: true },
+      });
+      return res.status(200).send({ events });
+    } catch (err) {}
   }
 }

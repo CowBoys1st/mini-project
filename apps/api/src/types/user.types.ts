@@ -58,3 +58,21 @@ interface IGetUsersResponse {
     users: IUser[];
     error?: string;
 }
+export type DiscountCoupon = {
+    id: number;
+    userId: number;
+    code: string;
+    discountValue: number;
+    expiresAt: Date;
+    used: boolean;
+    createdAt: Date;
+  };
+  
+  
+export type UserWithDiscountCoupons = {
+    id: number;
+    name: string;
+    email: string;
+    discountCoupons: DiscountCoupon[];
+  };
+  

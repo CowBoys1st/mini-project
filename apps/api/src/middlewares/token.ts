@@ -40,13 +40,13 @@ export const isCostumer = async (req:Request, res:Response, next:NextFunction) =
     }
 }
 export const isEO = async (req:Request, res:Response, next:NextFunction) => {
-    if (req.user?.roleId == 1) {
+    if (req.user?.roleId == 2) {
         next()
     }
     else {
         res.status(200).send({
             status:"error",
-            msg:"You are not authorize as costumer"
+            msg:"You are not authorize as Eo"
         })
     }
 }

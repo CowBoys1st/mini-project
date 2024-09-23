@@ -1,7 +1,5 @@
-import dynamic from "next/dynamic";
+import LoginForm from "@/components/loginForm";
 
-// Dynamic import untuk LoginForm tanpa SSR
-const LoginForm = dynamic(() => import("@/components/loginForm"), { ssr: false });
 
 export default function Login() {
     return (

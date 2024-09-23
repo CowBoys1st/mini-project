@@ -12,7 +12,7 @@ const Hero = () => {
         <p className='text-lg md:text-2xl mb-6'>
             Discover, book and manage events with ease and covenience
         </p>
-        <Link href="#events" className='px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition'>
+        <Link href="/events" className='px-8 py-3 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition'>
             Explore Events
         </Link>
       </div>
