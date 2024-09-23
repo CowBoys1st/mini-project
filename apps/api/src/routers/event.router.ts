@@ -16,9 +16,26 @@ export class EventRouter {
   private initializeRoutes(): void {
     this.router.get('/', this.eventController.getEvents);
     this.router.get('/:id', this.eventController.getEventById);
-    this.router.post('/',verifyToken, isEO, this.eventController.createEvents);
-    this.router.post('/images', uploader("event", "/events").single("image"), this.eventController.CreateImage );
-    this.router.get('/eo/eo', verifyToken, isEO, this.eventController.getEventByEoId )
+    this.router.post(
+      '/',
+      verifyToken,
+      isEO,
+      uploader('event', '/events').single('image'), // mengunggah foto
+      this.eventController.createEvents,
+    );
+
+    // this.router.post('/',verifyToken, isEO, this.eventController.createEvents);
+    this.router.post(
+      '/images',
+      uploader('event', '/events').single('image'),
+      this.eventController.CreateImage,
+    );
+    this.router.get(
+      '/eo/eo',
+      verifyToken,
+      isEO,
+      this.eventController.getEventByEoId,
+    );
   }
 
   getRouter(): Router {

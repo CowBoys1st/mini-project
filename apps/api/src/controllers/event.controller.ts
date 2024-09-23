@@ -52,39 +52,75 @@ export class EventController {
       ticketType,
       category,
       isFree,
-      organizerId,
     } = req.body;
 
     console.log(req.body);
     try {
-      if (!name || !description || price === undefined || !date || !time || !location || !availableSeats || !category) {
-        throw "missing required field"
+      if (
+        !name ||
+        !description ||
+        price === undefined ||
+        !date ||
+        !time ||
+        !location ||
+        !availableSeats ||
+        !category
+      ) {
+        throw 'missing required field';
       }
 
-      const userId = req.user?.userId
+      const userId = req.user?.userId;
 
       const userExists = await prisma.user.findUnique({
-        where: { id: userId },        
+        where: { id: userId },
       });
       if (!userExists) {
         throw 'Event Organizer not found';
       }
 
+      const freeEvent = isFree === 'true';
+
       const newEvent = await prisma.event.create({
         data: {
           name,
           description,
-          price,
+          price: isFree ? 0 : Number(price),
           date: new Date(date),
           time,
           location,
-          availableSeats,
+          availableSeats: Number(availableSeats),
           ticketType,
           category,
-          isFree,
+          isFree: freeEvent,
           organizer: { connect: { id: userId } },
         },
       });
+
+      // const newEvent = await prisma.event.create({
+      //   data: {
+      //     name,
+      //     description,
+      //     price,
+      //     date: new Date(date),
+      //     time,
+      //     location,
+      //     availableSeats,
+      //     ticketType,
+      //     category,
+      //     isFree,
+      //     organizer: { connect: { id: userId } },
+      //   },
+      // });
+
+      if (req.file) {
+        const link: string = `http://localhost:8000/public/events/${req.file.filename}`;
+        await prisma.image.create({
+          data: {
+            eventId: newEvent.id,
+            url: link,
+          },
+        });
+      }
 
       return res.status(201).send({
         status: 'ok',
@@ -125,20 +161,17 @@ export class EventController {
     }
   }
 
-  async getEventByEoId(req:Request, res:Response) {
+  async getEventByEoId(req: Request, res: Response) {
     try {
-      const userId= req.user?.userId
+      const userId = req.user?.userId;
 
       const events = await prisma.event.findMany({
-        where:{
-          organizerId:userId
+        where: {
+          organizerId: userId,
         },
-        include:{Ticket:true, reviews:true}
-      })
-      return res.status(200).send({events})
-
-    } catch (err) {
-      
-    }
+        include: { Ticket: true, reviews: true },
+      });
+      return res.status(200).send({ events });
+    } catch (err) {}
   }
 }

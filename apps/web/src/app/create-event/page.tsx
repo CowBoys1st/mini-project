@@ -4,7 +4,7 @@ import EventFormN from "@/components/EventFormN";
 const CreateEventPage = () => {
     return (
         <div>
-            <EventFormN />
+            <EventForm />
         </div>
     )
 }
