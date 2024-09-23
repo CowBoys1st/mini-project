@@ -11,6 +11,8 @@ import { EventTransaction, IEventWithImage } from '@/type/event';
 import { ApiResponse, DiscountCoupon } from '@/type/user';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ReviewForm from '@/components/ReviewForm';
+import ReviewList from '@/components/ReviewList';
 
 const EventsPage = ({ params }: { params: { id: string } }) => {
   const [event, setEvent] = useState<IEventWithImage | null>(null);
@@ -82,7 +84,13 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
   };
 
   const handlePayment = async () => {
-    const token = localStorage.getItem("token");
+    const token = localStorage.getItem('token');
+    if (!transaction || !transaction.id) {
+      alert('No transaction available.');
+      return;
+    }
+    console.log('cek transaksi:', transaction);
+    
     try {
       const response = await fetch(
         `http://localhost:8000/api/transaction/${transaction.id}`,
@@ -90,7 +98,7 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
           method: 'PATCH',
           headers: {
             'Content-Type': 'application/json',
-            'Authorization': `Bearer ${token}`
+            Authorization: `Bearer ${token}`,
           },
         },
       );
@@ -111,34 +119,32 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
   if (!event) return <p>Loading...</p>;
 
   return (
-    <div className="p-6 bg-gray-100 min-h-screen">
+    <div className="p-6 bg-gray-100 min-h-screen container mx-auto">
       <h1 className="text-4xl font-bold mb-6 text-center">Event Details</h1>
       {!event ? (
         <p className="text-center">Loading event details...</p>
       ) : (
         <div>
-          <EventDetails event={event} />
-          <button
-            onClick={handleBuyTicket}
-            className="bg-blue-500 text-white py-2 px-4 rounded-lg shadow-md hover:bg-blue-600 transition-colors"
-          >
-            Buy Ticket
-          </button>
+          <EventDetails event={event} onClick2={handleBuyTicket} />
         </div>
       )}
-      <div className="flex justify-between">
+      <div className="flex justify-between my-3">
         {coupons.length === 0 ? (
           <div>Tidak ada kupon</div>
         ) : (
           <MyCoupons id={+params.id} coupons={coupons as DiscountCoupon[]} />
         )}
 
-        <div className="points flex gap-5 items-center">
-          <h1 className="text-2xl z-10">My Points:</h1>
-          <p className="bg-yellow-400 text-red-500 h-fit text-3xl p-2 rounded-lg">
+        <div className="points flex flex-col md:flex-row gap-2 md:gap-5 items-center bg-white p-4 rounded-lg shadow-md">
+          <h1 className="text-lg md:text-2xl text-gray-700">My Points:</h1>
+          <p className="bg-yellow-400 text-red-500 text-xl md:text-3xl p-2 rounded-lg">
             {points}
           </p>
         </div>
+      </div>
+      <div>
+        <ReviewList eventId={event.id} />
+        <ReviewForm eventId={event.id}/>
       </div>
 
       <Modal
