@@ -4,16 +4,15 @@ import MyCoupons from '@/components/coupons';
 import EventDetails from '@/components/eventDetail';
 import Modal from '@/components/modals';
 import { getDiscountByUserId } from '@/lib/discount';
-import { AiFillCalendar, AiFillEnvironment } from 'react-icons/ai';
-import { FiImage } from 'react-icons/fi';
 import { getEventsById } from '@/lib/event';
 import { checkTransaction } from '@/lib/transaction';
 import { getPoints } from '@/lib/user';
 import { EventTransaction, IEventWithImage } from '@/type/event';
 import { ApiResponse, DiscountCoupon } from '@/type/user';
-import Image from 'next/image';
 import { useRouter } from 'next/navigation';
 import { useEffect, useState } from 'react';
+import ReviewForm from '@/components/ReviewForm';
+import ReviewList from '@/components/ReviewList';
 
 const EventsPage = ({ params }: { params: { id: string } }) => {
   const [event, setEvent] = useState<IEventWithImage | null>(null);
@@ -86,7 +85,12 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
 
   const handlePayment = async () => {
     const token = localStorage.getItem('token');
+    if (!transaction || !transaction.id) {
+      alert('No transaction available.');
+      return;
+    }
     console.log('cek transaksi:', transaction);
+    
     try {
       const response = await fetch(
         `http://localhost:8000/api/transaction/${transaction.id}`,
@@ -137,6 +141,10 @@ const EventsPage = ({ params }: { params: { id: string } }) => {
             {points}
           </p>
         </div>
+      </div>
+      <div>
+        <ReviewList eventId={event.id} />
+        <ReviewForm eventId={event.id}/>
       </div>
 
       <Modal
